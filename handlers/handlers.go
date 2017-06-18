@@ -19,6 +19,7 @@ func PingServer(w http.ResponseWriter, req *http.Request) {
 
 //Handles login
 func Login(w http.ResponseWriter, req *http.Request) {
+    //TODO: Check if this user has already logged in and has got all of the values in the JSON.
 
 	fmt.Println("Reached login URL....")
 	fmt.Println("Method: " + req.Method)
@@ -35,7 +36,7 @@ func Login(w http.ResponseWriter, req *http.Request) {
 
 //Handles deliverylog
 func DeliveryLog(w http.ResponseWriter, req *http.Request) {
-
+    //TODO: The user should have all of the values of the logged in user as part of Authorization
 	fmt.Println("Reached deliverylog URL....")
 	fmt.Println("Method: " + req.Method)
 	//Verify user, if not a valid user(valid interms of session & ability to do deliverylog GET, POST), send error
