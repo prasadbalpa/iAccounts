@@ -1,5 +1,5 @@
 package handlers
-
+//All of the deliverylog handlers
 import (
 	"encoding/json"
 	"fmt"
@@ -55,5 +55,4 @@ func Fetch_Delivery_Logs_Given_orgID(orgID string) []byte {
 		return nil
 	}
 	return deliveryresp
-
 }
