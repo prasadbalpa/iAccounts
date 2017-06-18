@@ -3,7 +3,7 @@ package cfg
 import (
 	"iAccounts/utils"
 )
-
+//All of the configurations are stored in this file
 const (
 	CASSANDRA_CLUSTER         = "127.0.0.1"
 	ORGANIZATION_KEYSPACE     = "organization"
