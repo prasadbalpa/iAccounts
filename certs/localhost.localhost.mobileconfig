@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadContent</key>
+	<array>
+		<dict>
+			<key>PayloadCertificateFileName</key>
+			<string>localhost.crt</string>
+			<key>PayloadContent</key>
+			<data>
+			LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURKakNDQWc0
+			Q0NRRG1XZWFJa1pManNUQU5CZ2txaGtpRzl3MEJBUXNGQURCVk1R
+			c3dDUVlEVlFRR0V3SkoKVGpFTE1Ba0dBMVVFQ0JNQ1MwRXhFakFR
+			QmdOVkJBY1RDVUpoYm1kaGJHOXlaVEVRTUE0R0ExVUVDaE1IY0hK
+			aApjMkZrYXpFVE1CRUdBMVVFQXhNS2NISmhjMkZrYXlCRFFUQWVG
+			dzB4TnpBMk1Ea3hNakl3TkRsYUZ3MHhPREV3Ck1qSXhNakl3TkRs
+			YU1GVXhDekFKQmdOVkJBWVRBa2xPTVFzd0NRWURWUVFJRXdKTFFU
+			RVNNQkFHQTFVRUJ4TUoKUW1GdVoyRnNiM0psTVJBd0RnWURWUVFL
+			RXdkd2NtRnpZV1JyTVJNd0VRWURWUVFERXdwd2NtRnpZV1JySUVO
+			QgpNSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJD
+			Z0tDQVFFQXhpc0pablFNNGYyWjlFRFBvMFFTCnNFK1V3SFArbnJ2
+			QkZEQlY0NFBQdlNvVFBYem5ubmQwV3JnaG5kaGhjbEo0T1ZYMlJy
+			OEEwRVFRWGdTMjIyejEKSGFoM0ZqSGU0TGJmaS9zd21Ja3l4RjFZ
+			dWwvYTcwVkRVQVZkMFV1Qk1Eb1lNS0ZycHF4eDRQeTQrM2pFOXY0
+			UgpiVElDamZQSjZ3ZldsTzhDR0hvZkZkV2tlbnlBYkZuOVgreFlt
+			S1lod3pENXZYbFNYQ2dUVDc0L3pjRnZxcHErClRXN3FTUG92MHVO
+			Q1hzVHpKUXp3ZHhUQzJoalBoemRpdzBVaFhXUURoMWtNM2NyR3NM
+			eW9sTkl1aE5EVlhtWkUKSGc2Y1FkaFVyRy94NlBwanpCNUZ1ekdk
+			ajlrMnMwVzhGaS9OS3V5TUg3SWJpZ29wNG1Qd3RTODZLVnZ3ZnJT
+			MgpOUUlEQVFBQk1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQmRr
+			Wko5K0htclVXWk8rZktlRDZLZzZXN3hpU3JoCnNCUHpjNXV1Zm9Z
+			VGNkSU5ROTlrcHJNRGN1SVhOVFdTOFpqMnVWMlphRnZpOVBPTUdJ
+			RUZlVkgzYzAyNGFkMGIKSVVjR1Q5UER2RG9oeVVjTENRaU9iNS9Z
+			T0o2cjZlL3RUcWdsdFo3R2FWckNGbnpIRG5nOGtaSkVJZEpkMG1j
+			bwpxREs1SFVhMml1WWo4R21vWEZNS3I1SU1NRUsvOSt0Sm5OeTlX
+			cE1xVVNkL1kyRnF6TXh0NXhpWGkvSlhNZXMyCm4xdEM4RG9GdS9I
+			SGlscEhHb3BMaFBQRmVBWnQvN1ZSYU5MWXhONGtKSjl3SUR3emEv
+			c2d5ZG9CRlJ1L0FSRkkKRVJCYVcxYnYzUENWQ2ZrRXdRbVBiZm9Z
+			NTZvNXRkMHlVaGNVc1pYR1BrcE9sVGtwTjBLaG0wQjMKLS0tLS1F
+			TkQgQ0VSVElGSUNBVEUtLS0tLQo=
+			</data>
+			<key>PayloadDescription</key>
+			<string>Adds a PKCS#1-formatted certificate</string>
+			<key>PayloadDisplayName</key>
+			<string>prasadk CA</string>
+			<key>PayloadIdentifier</key>
+			<string>com.apple.security.pkcs1.32FB3134-B05D-4BEE-8310-D1C20AB3C688</string>
+			<key>PayloadType</key>
+			<string>com.apple.security.pkcs1</string>
+			<key>PayloadUUID</key>
+			<string>32FB3134-B05D-4BEE-8310-D1C20AB3C688</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+		</dict>
+	</array>
+	<key>PayloadDisplayName</key>
+	<string>Untitled</string>
+	<key>PayloadIdentifier</key>
+	<string>PRASADK-M-61RT.5B022CA8-6685-4C49-B8BC-214DDA4B2827</string>
+	<key>PayloadRemovalDisallowed</key>
+	<false/>
+	<key>PayloadType</key>
+	<string>Configuration</string>
+	<key>PayloadUUID</key>
+	<string>A8EF2723-BBEA-49FC-BAC3-9820F5C06D3A</string>
+	<key>PayloadVersion</key>
+	<integer>1</integer>
+</dict>
+</plist>
