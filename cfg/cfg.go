@@ -2,6 +2,7 @@ package cfg
 
 import (
 	"iAccounts/utils"
+	"time"
 )
 //All of the configurations are stored in this file
 const (
@@ -19,7 +20,7 @@ const (
 	HTTPS_TLS_KEY =  "/Users/prasadk/go/src/iAccounts/certs/localhost.key"
 
 )
-
+var Starttime time.Time
 func GetCassandraClusters() string {
 	return CASSANDRA_CLUSTER
 }
