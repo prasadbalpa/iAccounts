@@ -5,6 +5,7 @@ import (
 	"iAccounts/handlers"
 	"log"
 	"net/http"
+	"iAccounts/cfg"
 )
 
 func main() {
@@ -14,7 +15,7 @@ func main() {
 	http.HandleFunc("/api/v1/ping", handlers.PingServer)
 	http.HandleFunc("/api/v1/login", handlers.Login)
 	http.HandleFunc("/api/v1/deliverylog", handlers.DeliveryLog)
-	err := http.ListenAndServeTLS(":8445", "/Users/prasadk/go/src/iAccounts/certs/localhost.crt", "/Users/prasadk/go/src/iAccounts/certs/localhost.key", nil)
+	err := http.ListenAndServeTLS(cfg.HTTPS_SERVER_PORT, cfg.HTTPS_TLS_CERTIFICATE, cfg.HTTPS_TLS_KEY, nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}

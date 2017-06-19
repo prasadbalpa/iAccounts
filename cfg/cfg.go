@@ -14,6 +14,10 @@ const (
 	LOGIN_MOBILE_NUMBER       = 1
 	LOGIN_OTP_NUMBER          = 2
 	LOGIN_SUCCESSFUL          = 3
+	HTTPS_SERVER_PORT = ":8443"
+	HTTPS_TLS_CERTIFICATE = "/Users/prasadk/go/src/iAccounts/certs/localhost.crt"
+	HTTPS_TLS_KEY =  "/Users/prasadk/go/src/iAccounts/certs/localhost.key"
+
 )
 
 func GetCassandraClusters() string {
