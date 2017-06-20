@@ -5,8 +5,9 @@ import (
 	"net/http"
 )
 
-func SetHttpHeaderValues(response http.ResponseWriter, header string, val string) {
 
+func SetHttpHeaderValues(response http.ResponseWriter, header string, val string) {
+    fmt.Println("Header Values: " + header + " : " + val)
 	response.Header().Set(header, val)
 
 }

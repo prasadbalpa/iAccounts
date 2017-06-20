@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"regexp"
+
 )
 
 type LoginJSON struct {
@@ -22,6 +23,7 @@ type LoginResponse struct {
 	Response_type int    `json:"responsetype"`
 	Mobile_number string `json:"mobilenumber"`
 	Session_id    string `json:"sessionid"`
+	Token string `json:"token"`
 }
 
 type Logininput struct {
@@ -29,50 +31,83 @@ type Logininput struct {
 }
 
 //All of the /login requests will land here to understand first where we are with the login for a particular user
-func LoginRouter(Request *http.Request) []byte {
+func LoginRouter(Request *http.Request) ([]byte, map[string]string)  {
 	var loginjson LoginJSON
+    HeaderValues := make(map[string]string)
+    authorization := Request.Header.Get("Authorization")
+	fmt.Println("Authorization header : ", authorization)
 
+	//Check if authorization code is stored in the session table
+	//If authorization code is already existing, return saying "already logged in"
+	//loggedin := VerifyAuthorizationCode(authorization)
+	//if loggedin == true {
+		//Return
+	//	return []byte("hello great job"), nil
+	//}
 	body, err := ioutil.ReadAll(Request.Body)
 	fmt.Println(string(body))
 	if err != nil {
 		//send error json for login
-		return nil
+		return nil, nil
 	}
+	fmt.Println(body)
 	err = json.Unmarshal(body, &loginjson)
 	fmt.Println("Login Structure: ")
 	fmt.Println(loginjson)
 	if err != nil {
 		//send error json for login
 		fmt.Println("Error while unmarshing the json from the client...returning.")
-		return nil
+		return nil, nil
 	}
 
 	if loginjson.Request_type == cfg.LOGIN_MOBILE_NUMBER {
 		if loginjson.Mobile_number != "" {
 			fmt.Println(loginjson.Mobile_number)
+
 			resp := VerifyuserIDAndGenerateOTP(loginjson)
-			return resp
+			HeaderValues["Content-type"] = "application/json"
+			return resp, HeaderValues
+		} else {
+			return nil, nil
 		}
 	} else if loginjson.Request_type == cfg.LOGIN_OTP_NUMBER {
 		fmt.Println(loginjson.OTP_number)
 		otpresp := VerifyuserIDotpsessionidAndLogin(loginjson)
-		return []byte(otpresp)
+        HeaderValues["Content-type"] = "application/json"
+
+		return []byte(otpresp), HeaderValues
 	} else {
-		return nil
+		return nil, nil
 	}
-	return nil
+	return nil, nil
+}
+
+func VerifyAuthorizationCode(authorization string) bool {
+	if false == datamodels.GetSessionByAuthorization(authorization) {
+		return false
+	}
+	return true
 }
 
 func VerifyuserIDotpsessionidAndLogin(loginjson LoginJSON) []byte {
 
-	if false == datamodels.GetSession(loginjson.Mobile_number, loginjson.Session_id, loginjson.OTP_number) {
-		fmt.Println("Failed to the fetch the session....")
+	authorization, errs := datamodels.GetSession(loginjson.Mobile_number, loginjson.Session_id, loginjson.OTP_number)
+
+	if errs == false {
+		fmt.Println("Failed to get the session")
 		return nil
 	}
-	var loginresponse = LoginResponse{Response_type: cfg.LOGIN_SUCCESSFUL, Mobile_number: loginjson.Mobile_number, Session_id: loginjson.Session_id}
 
-	logresp, errs := json.Marshal(&loginresponse)
-	if errs != nil {
+	//TODO: Generate authorization token & Pass it on.  Henceforth all of the requests will be verified against this token
+    //TODO: Update the session table with authorization token (Token format : "Bearer<space><token>"
+	//if false == datamodels.UpdateSessionwithAuthorizationToken(loginjson.Mobile_number, loginjson.Session_id, loginjson.OTP_number, *authorization) {
+		//fmt.Println("Failed to update the authorization token")
+		//return nil
+	//}
+	var loginresponse = LoginResponse{Response_type: cfg.LOGIN_SUCCESSFUL, Mobile_number: loginjson.Mobile_number, Session_id: loginjson.Session_id, Token: *authorization}
+
+	logresp, errss := json.Marshal(&loginresponse)
+	if errss != nil {
 		//send error json for login
 		return nil
 	}
@@ -109,6 +144,8 @@ func VerifyuserIDAndGenerateOTP(loginjson LoginJSON) []byte {
 	var loginresponse = LoginResponse{Response_type: cfg.LOGIN_OTP_NUMBER, Mobile_number: loginjson.Mobile_number, Session_id: stable.Session_sessionid}
 
 	logresp, errs := json.Marshal(&loginresponse)
+	fmt.Println("JSON after Marshaling: ", logresp)
+	fmt.Println("Error after Marshaling", errs)
 	if errs != nil {
 		//send error json for login
 		return nil

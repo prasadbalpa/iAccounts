@@ -17,8 +17,10 @@ func main() {
 	http.HandleFunc("/api/v1/ping", handlers.PingServer)
 	http.HandleFunc("/api/v1/login", handlers.Login)
 	http.HandleFunc("/api/v1/deliverylog", handlers.DeliveryLog)
-	cfg.Starttime = time.Now()
-	err := http.ListenAndServeTLS(cfg.HTTPS_SERVER_PORT, cfg.HTTPS_TLS_CERTIFICATE, cfg.HTTPS_TLS_KEY, nil)
+	http.HandleFunc("/api/v1/customers", handlers.Customers)
+	http.HandleFunc("/api/v1/vehicles", handlers.Vehicles)
+	cfg.SetStartTime(time.Now())
+	err := http.ListenAndServeTLS(cfg.GetHTTPSServerport(), cfg.GetHTTPSTLSCERTIFICATEPath(), cfg.GetHTTPSTLSKEYPath(), nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}

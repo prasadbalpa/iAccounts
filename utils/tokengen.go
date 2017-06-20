@@ -5,6 +5,7 @@ import (
 	"os/exec"
 	"strconv"
 	"time"
+	"strings"
 )
 
 func Get6DigitsRandomNumbers() string {
@@ -21,5 +22,7 @@ func GenerateSecureSessionID() string {
 	if err != nil {
 		return ""
 	}
-	return string(sessionid)
+	var sid = string(sessionid)
+    sid = strings.TrimSpace(sid)
+	return sid
 }

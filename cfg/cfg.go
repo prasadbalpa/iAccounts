@@ -3,6 +3,7 @@ package cfg
 import (
 	"iAccounts/utils"
 	"time"
+	"fmt"
 )
 //All of the configurations are stored in this file
 const (
@@ -21,6 +22,19 @@ const (
 
 )
 var Starttime time.Time
+func SetStartTime(st time.Time) {
+	fmt.Println(st)
+	Starttime = st
+}
+
+func GetHTTPHEADERCONTENTTYPE() string {
+	return HTTP_HEADER_CONTENT_TYPE
+}
+
+func GetHTTPHEADERDATATYPEJSON() string {
+	return HTTP_HEADER_DATATYPE_JSON
+}
+
 func GetCassandraClusters() string {
 	return CASSANDRA_CLUSTER
 }
@@ -31,5 +45,14 @@ func GetOrgUserMapKeySpace() string {
 	return ORGUSERMAP_KEYSPACE
 }
 func GetOrgIDKeySpace(orgid string) string {
-	return (ORGID_KEYSPACE + utils.FindAndReplace(orgid, "-", "_"))
+	return ORGID_KEYSPACE + utils.FindAndReplace(orgid, "-", "_")
+}
+func GetHTTPSServerport() string {
+	return HTTPS_SERVER_PORT
+}
+func GetHTTPSTLSCERTIFICATEPath() string {
+	return HTTPS_TLS_CERTIFICATE
+}
+func GetHTTPSTLSKEYPath() string {
+	return HTTPS_TLS_KEY
 }

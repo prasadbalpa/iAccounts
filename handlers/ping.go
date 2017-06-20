@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 	"iAccounts/cfg"
+        "strconv"
 )
 
 type ping_Request struct {
@@ -16,7 +17,7 @@ func PingResponse() []byte {
 
 	var dur time.Duration
 	dur = time.Since(cfg.Starttime)
-	var prequest = ping_Request{"OK", "2017-06-14 10:12:12"}
+	var prequest = ping_Request{"OK", strconv.FormatInt(int64(dur), 10)}
 
 	b, err := json.Marshal(prequest)
 	if err != nil {
