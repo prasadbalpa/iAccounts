@@ -39,6 +39,28 @@ func Login(w http.ResponseWriter, req *http.Request) {
 	}
 
 }
+
+func Products(w http.ResponseWriter, req *http.Request) {
+	var authorization string
+	fmt.Println("Reached Customers URL....")
+	fmt.Println("Method: " + req.Method)
+	//Verify user, if not a valid user(valid interms of session & ability to do deliverylog GET, POST), send error
+	//If valid user, then use orgID to fulfill the request
+	//Check the authorization code here, if none, reject the offer
+	authorization = req.Header.Get("Authorization")
+	fmt.Println("Authorization: ", authorization)
+	if authorization == "" {
+		fmt.Fprintf(w, "No Authorization")
+		return
+	}
+	switch req.Method {
+	case "GET":
+		resp := Fetch_Products_Given_AuthorizationCode(authorization)
+		utils.SetHttpHeaderValues(w, cfg.HTTP_HEADER_CONTENT_TYPE, cfg.HTTP_HEADER_DATATYPE_JSON)
+		utils.SendHttpResponse(w, resp)
+	}
+}
+
 func Vehicles(w http.ResponseWriter, req *http.Request) {
 	var authorization string
 	fmt.Println("Reached Customers URL....")
