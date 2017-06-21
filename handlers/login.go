@@ -132,14 +132,15 @@ func VerifyuserIDAndGenerateOTP(loginjson LoginJSON) []byte {
 		return nil
 	}
 	//Enter the session info before OTP is sent out...just to make sure there is no gap between the two.
-
-	var stable = datamodels.Session_table{Session_phone: loginjson.Mobile_number, Session_sessionid: utils.GenerateSecureSessionID(), Session_created: utils.GenerateUnixTimeStamp(), Session_expired: false, Session_loggedin: false, Session_sessionotp: utils.Get6DigitsRandomNumbers()}
+    var OTP string
+	OTP = utils.Get6DigitsRandomNumbers()
+	var stable = datamodels.Session_table{Session_phone: loginjson.Mobile_number, Session_sessionid: utils.GenerateSecureSessionID(), Session_created: utils.GenerateUnixTimeStamp(), Session_expired: false, Session_loggedin: false, Session_sessionotp: OTP}
 	err := datamodels.InsertSession(&stable)
 	if err == false {
 		return nil
 	}
 	//Send OTP to the phone as it is established that the user exists and has an associated ORG
-
+    go utils.SendSMS("+91" + loginjson.Mobile_number,  OTP)
 	//Send it over as SMS
 	var loginresponse = LoginResponse{Response_type: cfg.LOGIN_OTP_NUMBER, Mobile_number: loginjson.Mobile_number, Session_id: stable.Session_sessionid}
 
