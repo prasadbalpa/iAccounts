@@ -5,13 +5,73 @@ import (
 	"iAccounts/cassandra"
 	"iAccounts/cfg"
 	"math/big"
+	"iAccounts/utils"
+
+	"strconv"
 )
 
 type Product_table struct {
 	Product_id       string
-	Product_discount big.Float
-	Product_name     string
-	Product_price    big.Float
+	Product_discount big.Float `json:"discount"`
+	Product_name     string `json:"product"`
+	Product_price    big.Float `json:"price"`
+}
+
+func IsValidProduct(orgid string, product string) bool {
+	cluster_handle := cassandra.GetClusterHandle(cfg.GetOrgIDKeySpace(orgid)) //change it to config package value
+	fmt.Println("OrgID KS : " + cfg.GetOrgIDKeySpace(orgid))
+	if cluster_handle == nil {
+		return false
+	}
+	fmt.Println("acquired cluster handle")
+	session_handle := cassandra.GetSessionHandle(cluster_handle)
+	if session_handle == nil {
+		return false
+	}
+	fmt.Println("acquired session handle")
+	//Not using '*' in the query to avoid any out of sequence results
+	buffer := "select product_id from products where product_name='" + product +"'"
+	var productid string
+	err := session_handle.Query(buffer).Scan(&productid)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func AddProductsByauthCodeAndProduct(authCode string, product Product_table) bool {
+	/////Verify if the customer and vehicle exist.
+	fmt.Println("AddCustomersByauthCodeAndCustomer: ", product)
+	orgid, orgname := GetORG_Given_authCode(authCode)
+	if orgid == nil || orgname == nil {
+		fmt.Println("Either orgid or orgname is NIL")
+		return false
+	}
+	if true == IsValidProduct(*orgid, product.Product_name) {
+		fmt.Println("Not a valid customer")
+		return false
+	}
+	cluster_handle := cassandra.GetClusterHandle(cfg.GetOrgIDKeySpace(*orgid))
+	if cluster_handle == nil {
+		return false
+	}
+	fmt.Println("acquired cluster handle")
+	session_handle := cassandra.GetSessionHandle(cluster_handle)
+	if session_handle == nil {
+		return false
+	}
+	fmt.Println("acquired session handle")
+	fmt.Println(product)
+	buffer := "insert into products (product_id, product_name, product_discount, product_price) values (" + utils.GenerateSecureSessionID() + ",'" + product.Product_name + "'," + strconv.Itoa(462) + "," + strconv.Itoa(0) + ")"
+	fmt.Println(buffer)
+	errs := session_handle.Query(buffer).Exec()
+
+	if errs != nil {
+		return false
+	}
+
+	fmt.Println("Returning true after insertion...")
+	return true
 }
 
 func GetProductsByAuthCode(authCode string ) ([]Product_table, *string) {

@@ -111,6 +111,34 @@ func Products(w http.ResponseWriter, req *http.Request) {
 		utils.SetHttpHeaderValues(w, cfg.HTTP_HEADER_CONTENT_TYPE, cfg.HTTP_HEADER_DATATYPE_JSON)
 		w.Header().Set("Access-Control-Allow-Origin", origin)
 		utils.SendHttpResponse(w, resp)
+	case "POST":
+		var prod datamodels.Product_table
+
+		body, _ := ioutil.ReadAll(req.Body)
+		fmt.Println(string(body))
+
+		err := json.Unmarshal(body, &prod)
+		if err != nil {
+			fmt.Println("Error in unmarshing the add customer request...")
+			return
+		}
+		fmt.Println(prod)
+		resp:= Add_Products_Given_AuthorizationCode(authorization, prod)
+		var rr Resultresponse
+		if resp == true {
+
+			rr= Resultresponse{Result: 1}
+
+		} else {
+			rr= Resultresponse{Result: 0}
+
+		}
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+		respon, errs := json.Marshal(rr)
+		if errs != nil {
+			return
+		}
+		utils.SendHttpResponse(w, respon)
 	}
 }
 
@@ -148,6 +176,34 @@ func Vehicles(w http.ResponseWriter, req *http.Request) {
 		utils.SetHttpHeaderValues(w, cfg.HTTP_HEADER_CONTENT_TYPE, cfg.HTTP_HEADER_DATATYPE_JSON)
 		w.Header().Set("Access-Control-Allow-Origin", origin)
 		utils.SendHttpResponse(w, resp)
+	case "POST":
+		var vehl datamodels.Vehicle_table
+
+		body, _ := ioutil.ReadAll(req.Body)
+		fmt.Println(string(body))
+
+		err := json.Unmarshal(body, &vehl)
+		if err != nil {
+			fmt.Println("Error in unmarshing the add customer request...")
+			return
+		}
+		fmt.Println(vehl)
+		resp:= Add_Vehicle_Given_AuthorizationCode(authorization, vehl)
+		var rr Resultresponse
+		if resp == true {
+
+			rr= Resultresponse{Result: 1}
+
+		} else {
+			rr= Resultresponse{Result: 0}
+
+		}
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+		respon, errs := json.Marshal(rr)
+		if errs != nil {
+			return
+		}
+		utils.SendHttpResponse(w, respon)
 	}
 
 }

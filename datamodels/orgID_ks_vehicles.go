@@ -4,11 +4,49 @@ import (
 	"fmt"
 	"iAccounts/cassandra"
 	"iAccounts/cfg"
+	"iAccounts/utils"
+
 )
 
 type Vehicle_table struct {
+	Vehicle_requesttype int `json:"requesttype"`
 	Vehicle_id     string
-	Vehicle_number string
+	Vehicle_number string `json:"number"`
+}
+
+func AddProductsByauthCodeAndVehicle(authCode string, vehicle Vehicle_table) bool {
+	/////Verify if the customer and vehicle exist.
+	fmt.Println("AddCustomersByauthCodeAndCustomer: ", vehicle)
+	orgid, orgname := GetORG_Given_authCode(authCode)
+	if orgid == nil || orgname == nil {
+		fmt.Println("Either orgid or orgname is NIL")
+		return false
+	}
+	if true == IsValidDeliveryVehicle(*orgid, vehicle.Vehicle_number) {
+		fmt.Println("Not a valid vehicle")
+		return false
+	}
+	cluster_handle := cassandra.GetClusterHandle(cfg.GetOrgIDKeySpace(*orgid))
+	if cluster_handle == nil {
+		return false
+	}
+	fmt.Println("acquired cluster handle")
+	session_handle := cassandra.GetSessionHandle(cluster_handle)
+	if session_handle == nil {
+		return false
+	}
+	fmt.Println("acquired session handle")
+	fmt.Println(vehicle)
+	buffer := "insert into deliveryvehicles (vehicle_id, vehicle_number) values (" + utils.GenerateSecureSessionID() + ",'" + vehicle.Vehicle_number + "')"
+	fmt.Println(buffer)
+	errs := session_handle.Query(buffer).Exec()
+
+	if errs != nil {
+		return false
+	}
+
+	fmt.Println("Returning true after insertion...")
+	return true
 }
 
 func GetVehiclesByAuthCode(authCode string) ([]Vehicle_table, *string) {

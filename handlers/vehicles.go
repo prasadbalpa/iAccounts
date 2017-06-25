@@ -18,6 +18,14 @@ type vehresponse struct {
 	Veh           []Vehicle_response `json:"vehicles"`
 }
 
+func Add_Vehicle_Given_AuthorizationCode(authCode string, vehicle datamodels.Vehicle_table) bool {
+	fmt.Println("Add_Vehicles_Given_AuthorizationCode: ")
+	fmt.Println(vehicle)
+	err := datamodels.AddProductsByauthCodeAndVehicle(authCode, vehicle)
+
+	return err
+}
+
 func Fetch_Vehicles_Given_AuthorizationCode(authorization string) []byte {
 	var vehicle_response []Vehicle_response
 	var vehicle_log []datamodels.Vehicle_table
