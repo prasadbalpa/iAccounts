@@ -12,12 +12,21 @@ type Customers_response struct {
 	Customer_id string `json:"id""`
 	Customer_email string `json:"email"`
 	Customer_phone string `json:"phone"`
+	Customer_city string `json:"city,omitempty"`
 }
 
 type custresponse struct {
 	Response_type int                `json:"responsetype"`
 	Organization  string             `json:"organization"`
 	Cust           []Customers_response `json:"customers"`
+}
+
+func Add_Customers_Given_AuthorizationCode(authorization string, customer datamodels.Customer_table) bool {
+    fmt.Println("Add_Customers_Given_AuthorizationCode: ")
+	fmt.Println(customer)
+	err := datamodels.AddCustomersByauthCodeAndCustomer(authorization, customer)
+
+	return err
 }
 
 func Fetch_Customers_Given_AuthorizationCode(authorization string) []byte {

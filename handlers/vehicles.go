@@ -15,7 +15,7 @@ type Vehicle_response struct {
 type vehresponse struct {
 	Response_type int                `json:"responsetype"`
 	Organization  string             `json:"organization"`
-	Veh           []Vehicle_response `json:"customers"`
+	Veh           []Vehicle_response `json:"vehicles"`
 }
 
 func Fetch_Vehicles_Given_AuthorizationCode(authorization string) []byte {

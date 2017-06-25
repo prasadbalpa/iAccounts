@@ -4,16 +4,70 @@ import (
 	"fmt"
 	"iAccounts/cassandra"
 	"iAccounts/cfg"
+	"iAccounts/utils"
+	_ "strconv"
 )
 
 type Customer_table struct {
-	Customer_tin     string
-	Customer_name    string
-	Customer_city    string
-	Customer_created string //timestamp
-	Customer_email   string
+	Customer_requesttype int `json:"requesttype"`
+	Customer_tin     string `json:"tin"`
+	Customer_name    string `json:"customer"`
+	Customer_city    string `json:"city"`
+	Customer_created string
+	Customer_email   string `json:"email"`
 	Customer_id      string
-	Customer_phone   string
+	Customer_phone   string `json:"phone"`
+}
+
+func AddCustomersByauthCodeAndCustomer(authCode string, customer Customer_table) bool {
+	/////Verify if the customer and vehicle exist.
+	fmt.Println("AddCustomersByauthCodeAndCustomer: ", customer)
+	orgid, orgname := GetORG_Given_authCode(authCode)
+	if orgid == nil || orgname == nil {
+		fmt.Println("Either orgid or orgname is NIL")
+		return false
+	}
+	if true == IsValidCustomer(*orgid, customer.Customer_name) {
+		fmt.Println("Not a valid customer")
+		return false
+	}
+	cluster_handle := cassandra.GetClusterHandle(cfg.GetOrgIDKeySpace(*orgid))
+	if cluster_handle == nil {
+		return false
+	}
+	fmt.Println("acquired cluster handle")
+	session_handle := cassandra.GetSessionHandle(cluster_handle)
+	if session_handle == nil {
+		return false
+	}
+	fmt.Println("acquired session handle")
+	fmt.Println(customer)
+	buffer := "insert into customerbyname (customer_id, customer_name, customer_tin, customer_city, customer_email, customer_phone, customer_created) values (" + utils.GenerateSecureSessionID() + ",'" + customer.Customer_name + "','" + customer.Customer_tin + "','" + customer.Customer_city + "','" + customer.Customer_email + "','" + customer.Customer_phone + "','" + utils.GenerateUnixTimeStamp() + "')"
+	fmt.Println(buffer)
+	errs := session_handle.Query(buffer).Exec()
+
+	if errs != nil {
+		return false
+	}
+	buffer = "insert into customerbyphone (customer_id, customer_name, customer_tin, customer_city, customer_email, customer_phone, customer_created) values (" + utils.GenerateSecureSessionID() + ",'" + customer.Customer_name + "','" + customer.Customer_tin + "','" + customer.Customer_city + "','" + customer.Customer_email + "','" + customer.Customer_phone + "','" + utils.GenerateUnixTimeStamp() + "')"
+	//buffer = "insert into customerbytin (delivery_id, delivery_timestamp, delivery_customer, delivery_quantity, delivery_vehicle) values (" + utils.GenerateSecureSessionID() + ",'" + deliverylog.Delivery_timestamp + "','" + deliverylog.Delivery_customer + "'," + strconv.Itoa(deliverylog.Delivery_quantity) + ",'" + deliverylog.Delivery_vehicle + "')"
+	fmt.Println(buffer)
+	errs = session_handle.Query(buffer).Exec()
+
+	if errs != nil {
+		return false
+	}
+	buffer = "insert into customerbytin (customer_id, customer_name, customer_tin, customer_city, customer_email, customer_phone, customer_created) values (" + utils.GenerateSecureSessionID() + ",'" + customer.Customer_name + "','" + customer.Customer_tin + "','" + customer.Customer_city + "','" + customer.Customer_email + "','" + customer.Customer_phone + "','" + utils.GenerateUnixTimeStamp() + "')"
+	//buffer = "insert into customerbyphone (delivery_id, delivery_timestamp, delivery_customer, delivery_quantity, delivery_vehicle) values (" + utils.GenerateSecureSessionID() + ",'" + deliverylog.Delivery_timestamp + "','" + deliverylog.Delivery_customer + "'," + strconv.Itoa(deliverylog.Delivery_quantity) + ",'" + deliverylog.Delivery_vehicle + "')"
+	fmt.Println(buffer)
+	errs = session_handle.Query(buffer).Exec()
+
+	if errs != nil {
+		return false
+	}
+
+	fmt.Println("Returning true after insertion...")
+	return true
 }
 
 func GetCustomersByAuthCode(authCode string) ([]Customer_table, *string) {

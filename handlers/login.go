@@ -23,7 +23,7 @@ type LoginResponse struct {
 	Response_type int    `json:"responsetype"`
 	Mobile_number string `json:"mobilenumber"`
 	Session_id    string `json:"sessionid"`
-	Token string `json:"token"`
+	Token string `json:"token,omitempty"`
 }
 
 type Logininput struct {
@@ -77,6 +77,7 @@ func LoginRouter(Request *http.Request) ([]byte, map[string]string)  {
 
 		return []byte(otpresp), HeaderValues
 	} else {
+		fmt.Println("No request type has been mentioned..")
 		return nil, nil
 	}
 	return nil, nil
@@ -140,7 +141,7 @@ func VerifyuserIDAndGenerateOTP(loginjson LoginJSON) []byte {
 		return nil
 	}
 	//Send OTP to the phone as it is established that the user exists and has an associated ORG
-    go utils.SendSMS("+91" + loginjson.Mobile_number,  OTP)
+    //go utils.SendSMS("+91" + loginjson.Mobile_number,  OTP)
 	//Send it over as SMS
 	var loginresponse = LoginResponse{Response_type: cfg.LOGIN_OTP_NUMBER, Mobile_number: loginjson.Mobile_number, Session_id: stable.Session_sessionid}
 

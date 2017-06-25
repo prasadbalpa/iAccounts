@@ -140,6 +140,47 @@ func AddDeliveryLogsByauthCode(authCode string, deliverylog Delivery_log) bool {
 	return true
 }
 
+func GetAllDeliveryLogsByauthCodeAndCustomer(authCode string, cust string) ([]Delivery_log, *string) {
+	var deliverylog []Delivery_log
+	orgid, orgname := GetORG_Given_authCode(authCode)
+	if orgid == nil || orgname == nil {
+		return nil, nil
+	}
+	//***********************
+	cluster_handle := cassandra.GetClusterHandle(cfg.GetOrgIDKeySpace(*orgid))
+	if cluster_handle == nil {
+		return nil, nil
+	}
+	fmt.Println("acquired cluster handle")
+	session_handle := cassandra.GetSessionHandle(cluster_handle)
+	if session_handle == nil {
+		return nil, nil
+	}
+	fmt.Println("acquired session handle")
+
+	buffer := "select delivery_timestamp, delivery_id, delivery_quantity, delivery_vehicle from deliverylogbycustomer where delivery_customer='" + cust + "'"
+	//log the buffer
+	fmt.Println("executing::" + buffer)
+	iteration := session_handle.Query(buffer).Iter()
+	//fmt.Println(iteration.NumRows())
+	if iteration == nil {
+		return nil, nil
+	}
+	//fmt.Println(iteration)
+	fmt.Println("executed::Iter()")
+	var delivery_timestamp, delivery_vehicle, delivery_id string
+	var delivery_quantity int
+
+	for iteration.Scan(&delivery_timestamp, &delivery_id, &delivery_quantity, &delivery_vehicle) {
+
+		deltab := Delivery_log{Delivery_org: *orgname, Delivery_id: delivery_id, Delivery_customer: cust, Delivery_quantity: delivery_quantity, Delivery_vehicle: delivery_vehicle, Delivery_timestamp: delivery_timestamp}
+
+		deliverylog = append(deliverylog, deltab)
+	}
+	fmt.Println("Crossed iteration Scan")
+	return deliverylog, orgname
+}
+
 func GetAllDeliveryLogsByauthCode(authCode string) ([]Delivery_log, *string) {
 	var deliverylog []Delivery_log
 	orgid, orgname := GetORG_Given_authCode(authCode)
