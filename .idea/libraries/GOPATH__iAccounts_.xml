@@ -8,6 +8,7 @@
       <root url="file://$PROJECT_DIR$/../golang.org" />
       <root url="file://$PROJECT_DIR$/../jobExecutor" />
       <root url="file://$PROJECT_DIR$/../jobCard" />
+      <root url="file://$PROJECT_DIR$/../iAccounts-Server" />
     </CLASSES>
     <SOURCES>
       <root url="file://$PROJECT_DIR$/../gopkg.in" />
@@ -17,6 +18,7 @@
       <root url="file://$PROJECT_DIR$/../golang.org" />
       <root url="file://$PROJECT_DIR$/../jobExecutor" />
       <root url="file://$PROJECT_DIR$/../jobCard" />
+      <root url="file://$PROJECT_DIR$/../iAccounts-Server" />
     </SOURCES>
     <excluded>
       <root url="file://$PROJECT_DIR$" />
