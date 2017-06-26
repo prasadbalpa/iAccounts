@@ -1,22 +1,24 @@
 <component name="libraryTable">
   <library name="GOPATH &lt;iAccounts&gt;">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/../gopkg.in" />
-      <root url="file://$PROJECT_DIR$/../.git" />
-      <root url="file://$PROJECT_DIR$/../queueManager" />
-      <root url="file://$PROJECT_DIR$/../github.com" />
-      <root url="file://$PROJECT_DIR$/../golang.org" />
-      <root url="file://$PROJECT_DIR$/../jobExecutor" />
-      <root url="file://$PROJECT_DIR$/../jobCard" />
+      <root url="file://$USER_HOME$/go/src/gopkg.in" />
+      <root url="file://$USER_HOME$/go/src/.git" />
+      <root url="file://$USER_HOME$/go/src/queueManager" />
+      <root url="file://$USER_HOME$/go/src/iAccounts" />
+      <root url="file://$USER_HOME$/go/src/github.com" />
+      <root url="file://$USER_HOME$/go/src/golang.org" />
+      <root url="file://$USER_HOME$/go/src/jobExecutor" />
+      <root url="file://$USER_HOME$/go/src/jobCard" />
     </CLASSES>
     <SOURCES>
-      <root url="file://$PROJECT_DIR$/../gopkg.in" />
-      <root url="file://$PROJECT_DIR$/../.git" />
-      <root url="file://$PROJECT_DIR$/../queueManager" />
-      <root url="file://$PROJECT_DIR$/../github.com" />
-      <root url="file://$PROJECT_DIR$/../golang.org" />
-      <root url="file://$PROJECT_DIR$/../jobExecutor" />
-      <root url="file://$PROJECT_DIR$/../jobCard" />
+      <root url="file://$USER_HOME$/go/src/gopkg.in" />
+      <root url="file://$USER_HOME$/go/src/.git" />
+      <root url="file://$USER_HOME$/go/src/queueManager" />
+      <root url="file://$USER_HOME$/go/src/iAccounts" />
+      <root url="file://$USER_HOME$/go/src/github.com" />
+      <root url="file://$USER_HOME$/go/src/golang.org" />
+      <root url="file://$USER_HOME$/go/src/jobExecutor" />
+      <root url="file://$USER_HOME$/go/src/jobCard" />
     </SOURCES>
     <excluded>
       <root url="file://$PROJECT_DIR$" />
