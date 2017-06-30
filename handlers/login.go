@@ -141,7 +141,7 @@ func VerifyuserIDAndGenerateOTP(loginjson LoginJSON) []byte {
 		return nil
 	}
 	//Send OTP to the phone as it is established that the user exists and has an associated ORG
-    //go utils.SendSMS("+91" + loginjson.Mobile_number,  OTP)
+    go utils.SendSMS("+91" + loginjson.Mobile_number,  OTP)
 	//Send it over as SMS
 	var loginresponse = LoginResponse{Response_type: cfg.LOGIN_OTP_NUMBER, Mobile_number: loginjson.Mobile_number, Session_id: stable.Session_sessionid}
 

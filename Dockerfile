@@ -1,17 +1,9 @@
-# Start from a Debian image with the latest version of Go installed
-# and a workspace (GOPATH) configured at /go.
-FROM golang
-
-# Copy the local package files to the container's workspace.
-ADD . /go/src/iAccounts
-
-# Build the outyet command inside the container.
-# (You may fetch or manage dependencies here,
-# either manually or with a tool like "godep".)
-RUN go install /go/src/iAccounts 
-
-# Run the outyet command by default when the container starts.
-ENTRYPOINT /go/iAccounts-Server
-
-# Document that the service listens on port 8080.
+FROM golang:1.7
+RUN apt-get update && apt-get install -y uuid-runtime && apt-get install -y net-tools
+RUN go get github.com/gocql/gocql
 EXPOSE 8443
+RUN mkdir /go/src/iAccounts
+WORKDIR /go/src/iAccounts
+ADD . /go/src/iAccounts
+RUN go build main/webServer.go
+CMD ["./webServer", "8443"]

@@ -7,7 +7,7 @@ import (
 )
 //All of the configurations are stored in this file
 const (
-	CASSANDRA_CLUSTER         = "127.0.0.1"
+	CASSANDRA_CLUSTER         = "iaccounts-cassandra-1"
 	ORGANIZATION_KEYSPACE     = "organization"
 	ORGUSERMAP_KEYSPACE       = "orgusermap"
 	ORGID_KEYSPACE            = "org_"
@@ -16,9 +16,9 @@ const (
 	LOGIN_MOBILE_NUMBER       = 1
 	LOGIN_OTP_NUMBER          = 2
 	LOGIN_SUCCESSFUL          = 3
-	HTTPS_SERVER_PORT = ":8443"
-	HTTPS_TLS_CERTIFICATE = "/Users/prasadk/go/src/iAccounts/certs/localhost.crt"
-	HTTPS_TLS_KEY =  "/Users/prasadk/go/src/iAccounts/certs/localhost.key"
+	HTTPS_SERVER_PORT = ":8446"
+	HTTPS_TLS_CERTIFICATE = "/go/src/iAccounts/certs/localhost.crt"
+	HTTPS_TLS_KEY =  "/go/src/iAccounts/certs/localhost.key"
 
 )
 var Starttime time.Time
