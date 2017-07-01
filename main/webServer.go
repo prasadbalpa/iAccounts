@@ -13,7 +13,7 @@ import (
 
 func main() {
 
-	fmt.Println("Initializing iAccounts WEB Server....Please wait....")
+	fmt.Println("Initializing iAccounts Web Server....Please wait....")
         fmt.Println("Asking me to run at..." + os.Args[1])
 	http.HandleFunc("/api/v1/ping", handlers.PingServer)
 	http.HandleFunc("/api/v1/login", handlers.Login)
