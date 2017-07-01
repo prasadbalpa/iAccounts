@@ -21,6 +21,7 @@ func main() {
 	http.HandleFunc("/api/v1/customers", handlers.Customers)
 	http.HandleFunc("/api/v1/products", handlers.Products)
 	http.HandleFunc("/api/v1/vehicles", handlers.Vehicles)
+	http.HandleFunc("/api/v1/purchases", handlers.Purchases)
 	cfg.SetStartTime(time.Now())
 	err := http.ListenAndServeTLS(":" + os.Args[1] /*cfg.GetHTTPSServerport()*/, cfg.GetHTTPSTLSCERTIFICATEPath(), cfg.GetHTTPSTLSKEYPath(), nil)
 	if err != nil {
