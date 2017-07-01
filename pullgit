@@ -1,0 +1,5 @@
+!/bin/bash
+
+git pull --rebase
+docker build -t iaccounts-webserver .
+docker-compose up -d
