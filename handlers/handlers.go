@@ -13,7 +13,71 @@ import (
 type Resultresponse struct {
 	Result int `json:"result"`
 }
+func Suppliers(w http.ResponseWriter, req *http.Request) {
+	var authorization string
+	origin := req.Header.Get("Origin")
+	fmt.Print(origin)
+	fmt.Println("Reached Suppliers URL....")
+	fmt.Println("Method: " + req.Method)
+	//Verify user, if not a valid user(valid interms of session & ability to do deliverylog GET, POST), send error
+	//If valid user, then use orgID to fulfill the request
+	//Check the authorization code here, if none, reject the offer
+	if req.Method == "OPTIONS" {
+		fmt.Println("Entered into Options Method..")
+		origin := req.Header.Get("Origin")
+		fmt.Println(origin)
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+		w.Header().Set("Access-Control-Max-Age", "1000")
+		w.Header().Set("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, Origin, Authorization, Accept, Client-Security-Token, Accept-Encoding")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT")
+		fmt.Println("Customers::sending OPTIONS headers...")
+		fmt.Fprintf(w, "")
+		return
+	}
+	authorization = req.Header.Get("Authorization")
+	fmt.Println("Authorization: ", authorization)
+	if authorization == "" {
+		fmt.Fprintf(w, "No Authorization")
+		return
+	}
+	switch req.Method {
+	case "GET":
+		resp := Fetch_Suppliers_Given_AuthorizationCode(authorization)
+		utils.SetHttpHeaderValues(w, cfg.HTTP_HEADER_CONTENT_TYPE, cfg.HTTP_HEADER_DATATYPE_JSON)
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+		utils.SendHttpResponse(w, resp)
+	case "POST":
+		var supp datamodels.Supplier_table
 
+		body, _ := ioutil.ReadAll(req.Body)
+		fmt.Println(string(body))
+
+		err := json.Unmarshal(body, &supp)
+		if err != nil {
+			fmt.Println("Error in unmarshing the add customer request...")
+			return
+		}
+		fmt.Println(supp)
+		resp:= Add_Suppliers_Given_AuthorizationCode(authorization, supp)
+		var rr Resultresponse
+		if resp == true {
+
+			rr= Resultresponse{Result: 1}
+
+		} else {
+			rr= Resultresponse{Result: 0}
+
+		}
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+		respon, errs := json.Marshal(rr)
+		if errs != nil {
+			return
+		}
+		utils.SendHttpResponse(w, respon)
+	}
+
+}
 func PingServer(w http.ResponseWriter, req *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")

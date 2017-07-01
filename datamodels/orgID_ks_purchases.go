@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"iAccounts/cassandra"
 	"iAccounts/cfg"
+	//"iAccounts/utils"
+	//"strconv"
+	"math/big"
 	"iAccounts/utils"
 	"strconv"
 )
@@ -16,7 +19,7 @@ type Purchase_Table struct {
 	Purchase_supplier  string `json:"supplier,omitempty"`
 	Purchase_quantity  int    `json:"quantity,omitempty"`
 	Purchase_vehicle   string `json:"vehicle,omitempty"`
-	Purchase_price string `json:"price,omitempty"`
+	Purchase_price big.Float `json:"price,omitempty"`
 	Purchase_orderid string `json:"orderid"`
 	Purchase_product string `json:"product"`
 	Purchase_org string `json:"Organization,omitempty"`
@@ -40,8 +43,9 @@ func GetAllPurchasesByauthCode(authCode string) ([]Purchase_Table, *string) {
 	}
 	fmt.Println("acquired session handle")
 
-	buffer := "select * from purchasesbytimestamp"
-	//log the buffer
+	buffer := "select purchase_timestamp,purchase_supplier, purchase_vehicle,purchase_orderid,purchase_product,purchase_quantity from purchasesbytimestamp"
+
+		//log the buffer
 	fmt.Println("executing::" + buffer)
 	iteration := session_handle.Query(buffer).Iter()
 	//fmt.Println(iteration.NumRows())
@@ -51,9 +55,10 @@ func GetAllPurchasesByauthCode(authCode string) ([]Purchase_Table, *string) {
 	//fmt.Println(iteration)
 	fmt.Println("executed::Iter()")
 	var purchase_timestamp, purchase_supplier, purchase_orderid, purchase_id, purchase_vehicle, purchase_product string
-	var purchase_quantity, purchase_price int
+	var purchase_quantity /*, purchase_price*/ int
 
-	for iteration.Scan(&purchase_timestamp, &purchase_supplier, &purchase_vehicle, &purchase_orderid, &purchase_vehicle, &purchase_product,&purchase_quantity, &purchase_price ) {
+	for iteration.Scan(&purchase_timestamp, &purchase_supplier, &purchase_vehicle, &purchase_orderid, &purchase_product, &purchase_quantity /*, &purchase_price*/ ) {
+
 
 		purctab := Purchase_Table{Purchase_org: *orgname, Purchase_id: purchase_id, Purchase_supplier: purchase_supplier, Purchase_quantity: purchase_quantity, Purchase_vehicle: purchase_vehicle, Purchase_timestamp: purchase_timestamp, Purchase_orderid: purchase_orderid}
 
@@ -75,8 +80,8 @@ func AddPurchaseByauthCode(authCode string, purc Purchase_Table) bool {
 		fmt.Println("Not a valid delivery vehicle")
 		return false
 	}
-	if false == IsValidCustomer(*orgid, purc.Purchase_supplier) {
-		fmt.Println("Not a valid delivery vehicle")
+	if false == IsValidSupplier(*orgid, purc.Purchase_supplier) {
+		fmt.Println("Not a valid supplier")
 		return false
 	}
 	cluster_handle := cassandra.GetClusterHandle(cfg.GetOrgIDKeySpace(*orgid))
@@ -90,7 +95,7 @@ func AddPurchaseByauthCode(authCode string, purc Purchase_Table) bool {
 	}
 	fmt.Println("acquired session handle")
 	fmt.Println(purc)
-	buffer := "insert into purchasesbytimestamp (purchase_timestamp, purchase_id, purchase_supplier, purchase_orderid, purchase_price, purchase_product, purchase_quantity, purchase_vehicle) values (" + utils.GenerateSecureSessionID() + ",'" + deliverylog.Delivery_timestamp + "','" + deliverylog.Delivery_customer + "'," + strconv.Itoa(deliverylog.Delivery_quantity) + ",'" + deliverylog.Delivery_vehicle + "')"
+	buffer := "insert into purchasesbytimestamp (purchase_id, purchase_timestamp, purchase_supplier, purchase_orderid, purchase_product, purchase_quantity, purchase_vehicle) values (" + utils.GenerateSecureSessionID() + ",'" + purc.Purchase_timestamp + "','" + purc.Purchase_supplier + "','" + purc.Purchase_orderid + "','" + purc.Purchase_product + "',"+ strconv.Itoa(purc.Purchase_quantity) + ",'" + purc.Purchase_vehicle + "')"
 	fmt.Println(buffer)
 	errs := session_handle.Query(buffer).Exec()
 

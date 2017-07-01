@@ -11,7 +11,7 @@ type Purchases_response struct {
 	Purchase_id string `json:"id"`
 	Purchase_supplier string `json:"supplier"`
 	Purchase_product string `json:"product"`
-	Purchase_quantity big.Float `json:"quantity"`
+	Purchase_quantity int `json:"quantity"`
 	Purchase_price big.Float `json:"price"`
 	Purchase_vehicle string `json:"vehicle"`
 	Purchase_timestamp string `json:"timestamp"`
@@ -21,7 +21,7 @@ type Purchases_response struct {
 type purcresponse struct {
 	Response_type int                `json:"responsetype"`
 	Organization  string             `json:"organization"`
-	Prod           []Purchases_response `json:"purchases"`
+	Purc           []Purchases_response `json:"purchases"`
 }
 
 func Add_Purchases_Given_AuthorizationCode(authCode string, purc datamodels.Purchase_Table) bool {
@@ -64,19 +64,19 @@ func Fetch_Purchases_Given_AuthorizationCode(authCode string) []byte {
 
 
 		}
-		var ddr Dlrresponse
-		ddr.Dlr = make([]Deliveryresponse, len(purchase_log))
+		var pur purcresponse
+		pur.Purc = make([]Purchases_response, len(purchase_log))
 		fmt.Println("Copying the pointers")
 		for i := 0; i < len(purchase_log); i++ {
 
-			ddr.Dlr[i] = purchaseresponse[i]
+			pur.Purc[i] = purchaseresponse[i]
 		}
 		//fmt.Println(deliveryresponse)
-		ddr.Response_type = 10
-		ddr.Organization = *orgname
+		pur.Response_type = 10
+		pur.Organization = *orgname
 		fmt.Println("Marshalling to JSON...")
 		//fmt.Println(ddr)
-		deliveryresp, errs := json.Marshal(ddr)
+		deliveryresp, errs := json.Marshal(pur)
 		fmt.Println(string(deliveryresp))
 		if errs != nil {
 			//send error json for login
